@@ -3,3 +3,4 @@
 data/
 imageCompressorHelper/
 stack.yaml.lock
+dist-newstyle
