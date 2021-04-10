@@ -25,3 +25,17 @@ distanceBetweenColors :: Color -> Color -> Float
 distanceBetweenColors (Color r1 g1 b1) (Color r2 g2 b2) =
   let sum = ((r1 - r2) ^ 2) + ((g1 - g2) ^ 2) + ((b1 - b2) ^ 2) in
   sqrt $ toEnum sum
+
+sumPixelColors :: [Pixel] -> Color
+sumPixelColors [pixel] = color pixel
+sumPixelColors (Pixel _ (Color r1 g1 b1):pixels) = 
+  let (Color r2 g2 b2) = sumPixelColors pixels in
+    Color (r1 + r2) (g1 + g2) (b1 + b2)
+
+computeMeanColor :: [Pixel] -> Color
+computeMeanColor [pixel] = color pixel
+computeMeanColor pixels =
+  let (Color r g b) = sumPixelColors pixels
+      len = length pixels
+  in
+    Color (r `div` len) (g `div` len) (b `div` len)
