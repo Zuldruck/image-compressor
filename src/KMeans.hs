@@ -25,3 +25,27 @@ generateKRandomCentroids k = do
   b <- randomRIO (0, 255)
   xs <- generateKRandomCentroids (k - 1)
   return (Color r g b : xs)
+
+findNearestCentroid :: Color -> [Centroid] -> Centroid
+findNearestCentroid _ [centroid] = centroid
+findNearestCentroid color (x:xs) =
+  let nearestCentroid = findNearestCentroid color xs in
+    if distanceBetweenColors color x < distanceBetweenColors color nearestCentroid then
+      x
+    else
+      nearestCentroid
+
+createClusters :: [Centroid] -> [Cluster]
+createClusters = map (`Cluster` [])
+
+assignPixelToCentroid :: Pixel -> Centroid -> [Cluster] -> [Cluster]
+assignPixelToCentroid pixel c [] = []
+assignPixelToCentroid pixel c (cluster:clusters)
+  | centroid cluster == c = cluster{pixels = pixel : pixels cluster} : clusters
+  | otherwise = cluster : assignPixelToCentroid pixel c clusters
+
+assignPixelsToClusters :: [Pixel] -> [Centroid] -> [Cluster] -> [Cluster]
+assignPixelsToClusters [] _ clusters = clusters
+assignPixelsToClusters (pixel:pixels) centroids clusters =
+  let nearestCentroid = findNearestCentroid (color pixel) centroids in
+    assignPixelToCentroid pixel nearestCentroid clusters
