@@ -10,8 +10,7 @@ module KMeans where
 import System.Random
 import Pixel
 
-data Centroid = Centroid Int Int Int
-  deriving Show
+type Centroid = Color
 
 generateKRandomCentroids :: Int -> IO [Centroid]
 generateKRandomCentroids 0 = return []
@@ -20,4 +19,4 @@ generateKRandomCentroids k = do
   g <- randomRIO (0, 255)
   b <- randomRIO (0, 255)
   xs <- generateKRandomCentroids (k - 1)
-  return (Centroid r g b : xs)
+  return (Color r g b : xs)
