@@ -1,0 +1,5 @@
+.stack-work/
+*~
+data/
+imageCompressorHelper/
+stack.yaml.lock
