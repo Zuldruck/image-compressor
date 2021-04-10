@@ -1,3 +1,10 @@
+--
+-- EPITECH PROJECT, 2021
+-- ImageCompressor
+-- File description:
+-- Params
+--
+
 module Params where
 
 data Params = Params {

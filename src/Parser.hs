@@ -1,3 +1,10 @@
+--
+-- EPITECH PROJECT, 2021
+-- ImageCompressor
+-- File description:
+-- Parser
+--
+
 module Parser where
 
 import Pixel

@@ -1,3 +1,10 @@
+--
+-- EPITECH PROJECT, 2021
+-- ImageCompressor
+-- File description:
+-- Main
+--
+
 module Main where
 
 import System.Environment
