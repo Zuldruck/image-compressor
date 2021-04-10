@@ -10,6 +10,7 @@ module Main where
 import System.Environment
 import Parser
 import Params
+import KMeans
 
 main :: IO ()
 main = do
@@ -17,4 +18,5 @@ main = do
   let params = getParams args initParams
   pixels <- parseFile $ pathToFile params
   putStrLn "File Parsed"
+  centroids <- generateKRandomCentroids $ colorNb params
   return ()
