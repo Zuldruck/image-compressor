@@ -12,6 +12,11 @@ import Pixel
 
 type Centroid = Color
 
+data Cluster = Cluster {
+  centroid :: Centroid,
+  pixels :: [Pixel]
+} deriving Show
+
 generateKRandomCentroids :: Int -> IO [Centroid]
 generateKRandomCentroids 0 = return []
 generateKRandomCentroids k = do
