@@ -47,5 +47,7 @@ assignPixelToCentroid pixel c (cluster:clusters)
 assignPixelsToClusters :: [Pixel] -> [Centroid] -> [Cluster] -> [Cluster]
 assignPixelsToClusters [] _ clusters = clusters
 assignPixelsToClusters (pixel:pixels) centroids clusters =
-  let nearestCentroid = findNearestCentroid (color pixel) centroids in
-    assignPixelToCentroid pixel nearestCentroid clusters
+  let nearestCentroid = findNearestCentroid (color pixel) centroids
+      updatedClusters = assignPixelToCentroid pixel nearestCentroid clusters
+  in
+    assignPixelsToClusters pixels centroids updatedClusters
