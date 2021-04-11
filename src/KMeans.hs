@@ -14,6 +14,7 @@ type Centroid = Color
 
 data Cluster = Cluster {
   centroid :: Centroid,
+  size :: Int,
   pixels :: [Pixel]
 }
 
@@ -49,12 +50,15 @@ findNearestCentroid color (x:xs) =
       nearestCentroid
 
 createClusters :: [Centroid] -> [Cluster]
-createClusters = map (`Cluster` [])
+createClusters = map (\centroid -> Cluster centroid 0 [])
 
 assignPixelToCentroid :: Pixel -> Centroid -> [Cluster] -> [Cluster]
 assignPixelToCentroid pixel c [] = []
 assignPixelToCentroid pixel c (cluster:clusters)
-  | centroid cluster == c = cluster{pixels = pixel : pixels cluster} : clusters
+  | centroid cluster == c = cluster{
+    pixels = pixel : pixels cluster,
+    size = size cluster + 1
+  } : clusters
   | otherwise = cluster : assignPixelToCentroid pixel c clusters
 
 assignPixelsToClusters :: [Pixel] -> [Centroid] -> [Cluster] -> [Cluster]
