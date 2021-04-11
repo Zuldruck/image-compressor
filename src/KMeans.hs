@@ -51,3 +51,17 @@ assignPixelsToClusters (pixel:pixels) centroids clusters =
       updatedClusters = assignPixelToCentroid pixel nearestCentroid clusters
   in
     assignPixelsToClusters pixels centroids updatedClusters
+
+generateNewCentroids :: [Cluster] -> [Centroid]
+generateNewCentroids = map (computeMeanColor . pixels)
+
+clusterise :: [Centroid] -> [Pixel] -> Float -> [Cluster]
+clusterise _ [] _ = []
+clusterise centroids pixels limit =
+  let clusters = assignPixelsToClusters pixels centroids (createClusters centroids)
+      newCentroids = generateNewCentroids clusters
+  in
+    if centroids == newCentroids then
+      clusters
+    else
+      clusterise newCentroids pixels limit
