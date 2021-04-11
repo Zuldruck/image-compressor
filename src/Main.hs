@@ -19,4 +19,5 @@ main = do
   pixels <- parseFile $ pathToFile params
   centroids <- generateKRandomCentroids $ colorNb params
   let clusters = clusterise centroids pixels $ convergenceLimit params
+  putStrLn $ showClusters clusters
   return ()
