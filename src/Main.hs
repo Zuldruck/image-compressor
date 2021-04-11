@@ -17,7 +17,6 @@ main = do
   args <- getArgs
   let params = getParams args initParams
   pixels <- parseFile $ pathToFile params
-  putStrLn "File Parsed"
   centroids <- generateKRandomCentroids $ colorNb params
   let clusters = clusterise centroids pixels $ convergenceLimit params
   return ()
