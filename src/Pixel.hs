@@ -37,10 +37,8 @@ sumPixelColors (Pixel _ (Color r1 g1 b1):pixels) =
   let (Color r2 g2 b2) = sumPixelColors pixels in
     Color (r1 + r2) (g1 + g2) (b1 + b2)
 
-computeMeanColor :: [Pixel] -> Color
-computeMeanColor [pixel] = color pixel
-computeMeanColor pixels =
-  let (Color r g b) = sumPixelColors pixels
-      len = length pixels
-  in
-    Color (r `div` len) (g `div` len) (b `div` len)
+computeMeanColor :: [Pixel] -> Int -> Color
+computeMeanColor [pixel] _ = color pixel
+computeMeanColor pixels size =
+  let (Color r g b) = sumPixelColors pixels in
+    Color (r `div` size) (g `div` size) (b `div` size)

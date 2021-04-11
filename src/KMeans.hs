@@ -70,7 +70,7 @@ assignPixelsToClusters (pixel:pixels) centroids clusters =
     assignPixelsToClusters pixels centroids updatedClusters
 
 generateNewCentroids :: [Cluster] -> [Centroid]
-generateNewCentroids = map (computeMeanColor . pixels)
+generateNewCentroids = map (\(Cluster _ size pixels) -> computeMeanColor pixels size)
 
 clusterise :: [Centroid] -> [Pixel] -> Float -> [Cluster]
 clusterise _ [] _ = []
