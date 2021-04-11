@@ -21,6 +21,11 @@ instance Show Color where
 instance Show Pixel where
   show (Pixel (x, y) color) = "(" ++ show x ++ "," ++ show y ++ ") " ++ show color
 
+showPixels :: [Pixel] -> String
+showPixels [] = ""
+showPixels [p1, p2] = show p1 ++ "\n" ++ show p2
+showPixels (pixel:pixels) = show pixel ++ "\n" ++ showPixels pixels
+
 distanceBetweenColors :: Color -> Color -> Float
 distanceBetweenColors (Color r1 g1 b1) (Color r2 g2 b2) =
   let sum = ((r1 - r2) ^ 2) + ((g1 - g2) ^ 2) + ((b1 - b2) ^ 2) in
