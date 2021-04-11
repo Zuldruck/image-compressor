@@ -9,6 +9,7 @@ module KMeans where
 
 import System.Random
 import Pixel
+import Utils
 
 type Centroid = Color
 
@@ -72,11 +73,47 @@ assignPixelsToClusters (pixel:pixels) centroids clusters =
 generateNewCentroids :: [Cluster] -> [Centroid]
 generateNewCentroids = map (\(Cluster _ size pixels) -> computeMeanColor pixels size)
 
+countEmptyClusters :: [Cluster] -> Int
+countEmptyClusters [] = 0
+countEmptyClusters (Cluster _ _ []:clusters) = 1 + countEmptyClusters clusters
+countEmptyClusters (_:clusters) = countEmptyClusters clusters
+
+takeAndDropNPixelsOfClusters :: Int -> [Cluster] -> ([Pixel], [Cluster])
+takeAndDropNPixelsOfClusters n [] = ([], [])
+takeAndDropNPixelsOfClusters 0 clusters = ([], clusters)
+takeAndDropNPixelsOfClusters n (c@(Cluster centroid size pixels):clusters)
+  | size <= 1 = takeAndDropNPixelsOfClusters n (c:clusters)
+  | otherwise =
+    let toTake = if size > n then n else size - 1
+        nextToTake = n - toTake
+        (taken, rest) = takeAndDrop toTake pixels
+        (pixelsTaken, restClusters) = takeAndDropNPixelsOfClusters nextToTake clusters
+    in
+      (taken ++ pixelsTaken, Cluster centroid (size - toTake) rest:restClusters)
+
+fillEmptyClusters :: [Pixel] -> [Cluster] -> [Cluster]
+fillEmptyClusters [] clusters = clusters
+fillEmptyClusters _ [] = []
+fillEmptyClusters (pixel:pixels) (cluster@(Cluster _ _ []):clusters) =
+  cluster{size = 1, pixels = [pixel]}:fillEmptyClusters pixels clusters
+fillEmptyClusters pixels (cluster@(Cluster _ _ clusterPixels):clusters) =
+  cluster:fillEmptyClusters pixels clusters
+
+avoidEmptyClusters :: [Cluster] -> [Cluster]
+avoidEmptyClusters [] = []
+avoidEmptyClusters clusters =
+  let emptyClustersNb = countEmptyClusters clusters in
+  if emptyClustersNb > 0 then
+    let (pixels, newClusters) = takeAndDropNPixelsOfClusters emptyClustersNb clusters in
+      fillEmptyClusters pixels newClusters
+  else
+    clusters
+
 clusterise :: [Centroid] -> [Pixel] -> Float -> [Cluster]
 clusterise _ [] _ = []
 clusterise centroids pixels limit =
   let clusters = assignPixelsToClusters pixels centroids (createClusters centroids)
-      newCentroids = generateNewCentroids clusters
+      newCentroids = generateNewCentroids (avoidEmptyClusters clusters)
   in
     if centroids == newCentroids then
       clusters
