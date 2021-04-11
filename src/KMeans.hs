@@ -15,7 +15,20 @@ type Centroid = Color
 data Cluster = Cluster {
   centroid :: Centroid,
   pixels :: [Pixel]
-} deriving Show
+}
+
+instance Show Cluster where
+  show cluster =
+    "--\n" ++
+    show (centroid cluster) ++
+    "\n-\n" ++
+    showPixels (pixels cluster)
+
+
+showClusters :: [Cluster] -> String
+showClusters [] = ""
+showClusters [c1, c2] = show c1 ++ "\n" ++ show c2
+showClusters (cluster:clusters) = show cluster ++ "\n" ++ showClusters clusters
 
 generateKRandomCentroids :: Int -> IO [Centroid]
 generateKRandomCentroids 0 = return []
