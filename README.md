@@ -3,7 +3,8 @@
 ## What is it ?
 
 **image-compressor** is a program written in Haskell to compress the colors in an image.
-To do so it uses the clustering algorithm K-Means.
+
+To do so it uses my own implementation of the clustering algorithm K-Means.
 
 ## Example
 
